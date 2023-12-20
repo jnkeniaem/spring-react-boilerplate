@@ -1,0 +1,42 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:;MODE=MySQL
+    username: root
+    password: test_password
+  sql:
+    init:
+      mode: always
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        format_sql: true
+    defer-datasource-initialization: true
+  jwt:
+    key: your-jwt-key-your-jwt-key-your-jwt-key-your-jwt-key-your-jwt-key-your-jwt-key
+
+server:
+  host: http://localhost
+  client:
+    url: http://localhost
+    http-url: http://localhost
+  cookie:
+    domain: localhost
+    name: access_token
+    max-age: 604800000
+    path: /
+    http-only: true
+    secure: false
+    same-site: none
+  jwt:
+    common-token-expire-time: 604800000
+    refresh-token-expire-time: 2592000000
+
+swagger:
+  base-url: http://localhost

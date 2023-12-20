@@ -1,0 +1,27 @@
+Configuration:
+  status: debug
+
+  Properties:
+    property:
+      name: pattern
+      value: "%style{%d{yyyy-MM-dd HH:mm:ss}}{white} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%X}{normal, white} %style{%C{1}}{bright,yellow}: %msg%n%throwable"
+
+  Appenders:
+    Console:
+      name: console
+      target: SYSTEM_OUT
+      PatternLayout:
+        pattern: ${pattern}
+
+  Loggers:
+    logger:
+      - name: org.springframework
+        level: info
+        additivity: false
+        AppenderRef:
+          - ref: console
+      - name: com.example.server
+        level: debug
+        additivity: false
+        AppenderRef:
+          - ref: console
