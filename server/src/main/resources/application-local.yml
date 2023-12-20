@@ -22,7 +22,7 @@ spring:
     key: your-jwt-key-your-jwt-key-your-jwt-key-your-jwt-key-your-jwt-key-your-jwt-key
 
 logging:
-  config: classpath:log4j2.yml
+  config: classpath:log4j2-local.yml
 
 server:
   host: http://localhost
