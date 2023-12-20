@@ -3,14 +3,14 @@ name: Server CI
 on:
   push:
     paths:
-      - "backend/**"
+      - "server/**"
   workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  backend-CI:
+  server-CI:
     runs-on: ubuntu-latest
     steps:
       - name: 체크아웃
