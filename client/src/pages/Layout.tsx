@@ -8,6 +8,7 @@ import { Outlet } from "react-router";
 import styled from "styled-components";
 import { fecthMyInfo } from "@/api/axios.custom";
 import LoadingAnimation from "@/components/LoadingAnimation";
+import UserInfo from "@/components/UserInfo";
 
 const Layout = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -44,15 +45,12 @@ const Layout = (): JSX.Element => {
         setIsLoading(false);
       });
     }
-  }, []);
-
-  if (isLoading) {
-    return <LoadingAnimation />;
-  }
+  }, [token, isLoginPage, navigate]); // Add dependencies here
 
   return (
     <WrapperStyled>
       <MainStyled>
+        {myInfoData && <UserInfo user={myInfoData} />}
         <Outlet />
       </MainStyled>
     </WrapperStyled>
