@@ -1,7 +1,9 @@
 package com.example.server.todo.controller;
 
 import com.example.server.auth.annotation.LoginMemberInfo;
+import com.example.server.dto.CreateTodoRequestDto;
 import com.example.server.dto.MemberSessionDto;
+import com.example.server.dto.TodoDto;
 import com.example.server.dto.TodoListResponseDto;
 import com.example.server.todo.domain.TodoStatus;
 import com.example.server.todo.service.TodoService;
@@ -12,13 +14,17 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.server.auth.domain.MemberRole;
 
@@ -30,6 +36,25 @@ import com.example.server.auth.domain.MemberRole;
 public class TodoController {
 
 	private final TodoService todoService;
+
+	@Operation(summary = "Todo 생성", description = "Todo를 생성합니다.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "Todo 생성 성공"),
+	})
+	@PostMapping
+	@Secured(MemberRole.S_USER)
+	@ResponseStatus(value = HttpStatus.CREATED)
+	public TodoDto createTodo(
+			@RequestBody CreateTodoRequestDto createTodoRequestDto,
+			@LoginMemberInfo MemberSessionDto memberSessionDto
+	) {
+		log.info("Called createTodo() with memberSessionDto: {}, createTodoRequestDto: {}",
+				memberSessionDto, createTodoRequestDto);
+		return todoService.createTodo(
+				memberSessionDto.getMemberId(),
+				createTodoRequestDto.getTodoName()
+		);
+	}
 
 	@Operation(summary = "전체 회원 Todo 목록 조회", description = "전체 회원의 Todo 목록을 조회합니다.")
 	@ApiResponses(value = {
@@ -48,29 +73,11 @@ public class TodoController {
 				PageRequest.of(page, size));
 	}
 
-	@Operation(summary = "Todo 생성", description = "Todo를 생성합니다.")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "201", description = "Todo 생성 성공"),
-	})
-	@PostMapping
-	@Secured(MemberRole.S_USER)
-	public void createTodo(
-			@LoginMemberInfo MemberSessionDto memberSessionDto,
-			@RequestParam(value = "name") String name
-	) {
-		log.info("Called createTodo() with memberSessionDto: {}, name: {}",
-				memberSessionDto, name);
-		todoService.createTodo(
-				memberSessionDto.getMemberId(),
-				name
-		);
-	}
-
 	@Operation(summary = "Todo 삭제", description = "Todo를 삭제합니다.")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "204", description = "Todo 삭제 성공"),
 	})
-	@PostMapping(value = "/{todoId}")
+	@DeleteMapping(value = "/{todoId}")
 	@Secured(MemberRole.S_USER)
 	public void deleteTodo(
 			@LoginMemberInfo MemberSessionDto memberSessionDto,

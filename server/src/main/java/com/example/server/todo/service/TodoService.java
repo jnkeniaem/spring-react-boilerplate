@@ -36,18 +36,22 @@ public class TodoService {
 		Member member = memberRepository.findById(memberId)
 				.orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
 		Page<Todo> todoPage = todoRepository.findAll(pageable);
+		log.debug("todoPage: {}", todoPage);
+		log.debug("todoPage.getTotalElements(): {}", todoPage.getTotalElements());
+		log.debug("todoPage.getTotalPages(): {}", todoPage.getTotalPages());
 		MemberProfileDto memberProfileDto = memberMapper.toMemberProfileDto(member);
 		List<TodoDto> todos = todoPage.map(todo -> todoMapper.toTodoDto(todo, memberProfileDto))
 				.toList();
 		return todoMapper.toTodoListResponseDto(todos, todoPage.getTotalElements());
 	}
 
-	public void createTodo(Long memberId, String name) {
+	public TodoDto createTodo(Long memberId, String name) {
 		log.info("Called createTodo() with memberId: {}, name: {}", memberId, name);
 		Member member = memberRepository.findById(memberId)
 				.orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
 		Todo todo = Todo.create(name, member);
 		todoRepository.save(todo);
+		return todoMapper.toTodoDto(todo, memberMapper.toMemberProfileDto(member));
 	}
 
 	public void deleteTodo(Long memberId, Long todoId) {

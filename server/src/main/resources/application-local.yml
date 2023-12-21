@@ -34,7 +34,7 @@ server:
     name: access_token
     max-age: 604800000
     path: /
-    http-only: true
+    http-only: false
     secure: false
     same-site: none
   jwt:
