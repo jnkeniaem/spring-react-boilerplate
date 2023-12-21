@@ -40,5 +40,6 @@ jobs:
       - name: Deploy to Main S3 and Invalidate CloudFront cache
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
+          cd client
           aws s3 sync ./dist s3://${{ secrets.AWS_S3_CLIENT_MAIN_BUCKET_NAME }}
           aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT_MAIN_DISTRIBUTION_ID }} --paths "/*"
