@@ -1,3 +1,4 @@
+import { TodoStatus } from "@/types";
 import instance from "./axios.instance";
 
 const registerUrl = "/api/v1/auth/register";
@@ -46,10 +47,10 @@ export const fecthMyInfo = async (): Promise<any> => {
 };
 
 const createTodoUrl = "/api/v1/todos";
-export const createTodo = async (name: string): Promise<any> => {
+export const createTodo = async (todoName: string): Promise<any> => {
   try {
     const response = await instance.post(createTodoUrl, {
-      name,
+      todoName,
     });
     return response;
   } catch (error) {
@@ -70,9 +71,14 @@ export const removeTodo = async (todoId: number): Promise<any> => {
 };
 
 const updateTodosUrl = "/api/v1/todos";
-export const updateTodo = async (status: string): Promise<any> => {
+export const updateTodo = async (
+  todoId: number,
+  status: TodoStatus
+): Promise<any> => {
   try {
-    const response = await instance.patch(`${updateTodosUrl}/status/${status}`);
+    const response = await instance.patch(
+      `${updateTodosUrl}/${todoId}/status/${status}`
+    );
     return response;
   } catch (error) {
     console.error(error);

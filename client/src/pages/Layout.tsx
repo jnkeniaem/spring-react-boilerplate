@@ -5,13 +5,12 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { Outlet } from "react-router";
-import LoadingAnimation from "@/components/LoadingAnimation";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { fecthMyInfo } from "@/api/axios.custom";
+import LoadingAnimation from "@/components/LoadingAnimation";
 
 const Layout = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isValidToken, setIsValidToken] = useState<boolean>(false);
   const [myInfoData, setMyInfoData] = useState<User | null>(null);
   const setUser = useSetRecoilState<User>(userState);
   const navigate = useNavigate();
@@ -29,7 +28,6 @@ const Layout = (): JSX.Element => {
 
       setMyInfoData(myInfo);
       setUser(myInfo);
-      setIsValidToken(true);
       if (isRootPath || isLoginPage) {
         navigate("/home");
       }
@@ -39,14 +37,18 @@ const Layout = (): JSX.Element => {
   };
 
   useEffect(() => {
-    console.log(`token: ${token}`);
-    console.log(`isLoginPage: ${isLoginPage}`);
     if (!token && !isLoginPage) {
       navigate("/login");
     } else if (token) {
-      getMyInfo();
+      getMyInfo().finally(() => {
+        setIsLoading(false);
+      });
     }
   }, []);
+
+  if (isLoading) {
+    return <LoadingAnimation />;
+  }
 
   return (
     <WrapperStyled>
