@@ -10,31 +10,47 @@ import {
 } from "../api/axios.custom";
 import { Todo, TodoStatus } from "@/types";
 
+const PAGE_SIZE = 5; // Set page size
+
 const MyTodoList = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [newTodoName, setNewTodoName] = useState("");
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
   // Fetch todos when the component mounts
-  useEffect(() => {
-    const loadTodos = async () => {
-      try {
-        const response = await fetchMyTodos();
-        setTodos(response.data.todos); // Assuming response.data contains the todos
-      } catch (error) {
-        console.error("Failed to fetch todos:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const loadTodos = async () => {
+    try {
+      const response = await fetchMyTodos(currentPage, PAGE_SIZE);
+      setTodos(response.data.todos);
+      const totalResources = response.data.totalResources;
+      const totalPages = Math.floor(totalResources / PAGE_SIZE);
+      setTotalPages(totalPages);
+    } catch (error) {
+      console.error("Failed to fetch todos:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     loadTodos();
-  }, []);
+  }, [currentPage, totalPages]);
+
+  const handlePrevPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 0));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  };
 
   const handleDelete = async (todoId: number) => {
     try {
       await removeTodo(todoId);
-      setTodos(todos.filter((todo) => todo.todoId !== todoId));
+      // setTodos(todos.filter((todo) => todo.todoId !== todoId));
+      await loadTodos();
     } catch (error) {
       console.error("Failed to delete todo:", error);
     }
@@ -70,7 +86,8 @@ const MyTodoList = () => {
     try {
       const response = await createTodo(newTodoName);
       console.log(response.data);
-      setTodos([...todos, response.data]); // Update the state with the new todo
+      // setTodos([...todos, response.data]); // Update the state with the new todo
+      await loadTodos();
       setNewTodoName(""); // Reset the input field
     } catch (error) {
       console.error("Failed to create todo:", error);
@@ -117,6 +134,18 @@ const MyTodoList = () => {
             </ButtonGroup>
           </TodoItemStyled>
         ))}
+        <Pagination>
+          <button onClick={handlePrevPage} disabled={currentPage === 0}>
+            Prev
+          </button>
+          <span>{`${currentPage} / ${totalPages}`}</span>
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </Pagination>
       </TodoListStyled>
     </TodoListPageStyled>
   );
@@ -198,4 +227,11 @@ const ButtonStyled = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+`;
+
+const Pagination = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
 `;

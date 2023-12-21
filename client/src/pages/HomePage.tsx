@@ -9,8 +9,10 @@ const HomePage = () => {
   return (
     <WrapperStyled>
       <MainStyled>
-        <MyTodoList />
-        <AllMemberTodoList />
+        <MyTodoListStyled>
+          <MyTodoList />
+          <AllMemberTodoList />
+        </MyTodoListStyled>
       </MainStyled>
     </WrapperStyled>
   );
@@ -31,4 +33,8 @@ const MainStyled = styled.main`
   overflow-y: auto;
   user-select: none;
   gap: 10px;
+`;
+
+const MyTodoListStyled = styled.div`
+  margin-bottom: 20px; // Adjust this value for the desired space
 `;

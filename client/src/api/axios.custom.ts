@@ -87,9 +87,14 @@ export const updateTodo = async (
 };
 
 const fetchAllTodosUrl = "/api/v1/todos/all";
-export const fetchAllTodos = async (): Promise<any> => {
+export const fetchAllTodos = async (
+  page: number = 0,
+  size: number = 10
+): Promise<any> => {
   try {
-    const response = await instance.get(fetchAllTodosUrl);
+    const response = await instance.get(
+      `${fetchAllTodosUrl}?page=${page}&size=${size}`
+    );
     return response;
   } catch (error) {
     console.error(error);
@@ -98,9 +103,14 @@ export const fetchAllTodos = async (): Promise<any> => {
 };
 
 const fetchMyTodosUrl = "/api/v1/todos/members/me";
-export const fetchMyTodos = async (): Promise<any> => {
+export const fetchMyTodos = async (
+  page: number = 0,
+  size: number = 10
+): Promise<any> => {
   try {
-    const response = await instance.get(fetchMyTodosUrl);
+    const response = await instance.get(
+      `${fetchMyTodosUrl}?page=${page}&size=${size}`
+    );
     return response;
   } catch (error) {
     console.error(error);
@@ -109,9 +119,15 @@ export const fetchMyTodos = async (): Promise<any> => {
 };
 
 const fetchMembersTodosUrl = "/api/v1/todos/members";
-export const fetchMembersTodos = async (memberId: number): Promise<any> => {
+export const fetchMembersTodos = async (
+  memberId: number,
+  page: number = 0,
+  size: number = 10
+): Promise<any> => {
   try {
-    const response = await instance.get(`${fetchMembersTodosUrl}/${memberId}`);
+    const response = await instance.get(
+      `${fetchMembersTodosUrl}/${memberId}?page=${page}&size=${size}`
+    );
     return response;
   } catch (error) {
     console.error(error);

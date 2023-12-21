@@ -4,24 +4,39 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import LoadingAnimation from "./LoadingAnimation";
 
+const PAGE_SIZE = 5; // Set page size
+
 const AllMemberTodoList = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+
+  const loadTodos = async () => {
+    try {
+      const response = await fetchAllTodos(currentPage, PAGE_SIZE);
+      setTodos(response.data.todos); // Assuming response.data contains the todos
+      const totalResources = response.data.totalResources;
+      const totalPages = Math.floor(totalResources / PAGE_SIZE);
+      setTotalPages(totalPages);
+    } catch (error) {
+      console.error("Failed to fetch todos:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const loadTodos = async () => {
-      try {
-        const response = await fetchAllTodos();
-        setTodos(response.data.todos); // Assuming response.data contains the todos
-      } catch (error) {
-        console.error("Failed to fetch todos:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     loadTodos();
-  }, []);
+  }, [currentPage, totalPages]);
+
+  const handlePrevPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 0));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  };
 
   if (isLoading) {
     return <LoadingAnimation />; // Or any loading component you have
@@ -40,6 +55,18 @@ const AllMemberTodoList = () => {
             </ButtonGroup>
           </TodoItemStyled>
         ))}
+        <Pagination>
+          <button onClick={handlePrevPage} disabled={currentPage === 0}>
+            Prev
+          </button>
+          <span>{`${currentPage} / ${totalPages}`}</span>
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </Pagination>
       </TodoListStyled>
     </TodoListPageStyled>
   );
@@ -99,4 +126,11 @@ const StatusButton = styled.button`
   border: 1px solid #ccc;
   border-radius: 20px; /* More rounded */
   cursor: pointer;
+`;
+
+const Pagination = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
 `;
