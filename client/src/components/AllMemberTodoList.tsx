@@ -1,5 +1,5 @@
-import { fetchAllTodos } from "@/api/axios.custom";
-import { Todo } from "@/types";
+import { fetchAllTodos } from "../api/axios.custom";
+import { Todo } from "../types";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import LoadingAnimation from "./LoadingAnimation";

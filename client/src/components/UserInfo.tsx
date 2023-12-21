@@ -1,6 +1,5 @@
-import { removeCookie } from "@/api/cookies";
-import { User } from "@/types";
-import React from "react";
+import { removeCookie } from "../api/cookies";
+import { User } from "../types";
 import styled from "styled-components";
 
 const UserInfo = ({ user }: { user: User | null }): JSX.Element | null => {

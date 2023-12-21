@@ -1,11 +1,8 @@
-import AllMemberTodoList from "@/components/AllMemberTodoList";
-import MyTodoList from "@/components/MyTodoList";
-import { useNavigate } from "react-router-dom";
+import AllMemberTodoList from "../components/AllMemberTodoList";
+import MyTodoList from "../components/MyTodoList";
 import styled from "styled-components";
 
 const HomePage = () => {
-  const navigator = useNavigate();
-
   return (
     <WrapperStyled>
       <MainStyled>

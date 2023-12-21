@@ -8,7 +8,7 @@ import {
   updateTodo,
   fetchMyTodos,
 } from "../api/axios.custom";
-import { Todo, TodoStatus } from "@/types";
+import { Todo, TodoStatus } from "../types";
 
 const PAGE_SIZE = 5; // Set page size
 

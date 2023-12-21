@@ -1,4 +1,4 @@
-import LoginTemplate from "@/components/LoginTemplate";
+import LoginTemplate from "../components/LoginTemplate";
 
 const LoginPage = () => {
   return (

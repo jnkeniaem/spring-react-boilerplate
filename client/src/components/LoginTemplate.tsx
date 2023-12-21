@@ -1,7 +1,7 @@
 import { useState } from "react";
 import LoadingAnimation from "./LoadingAnimation";
 import styled from "styled-components";
-import { login, register } from "@/api/axios.custom";
+import { login, register } from "../api/axios.custom";
 import { useNavigate } from "react-router-dom";
 
 const LoginTemplate = (props: { pageTitle: string; pageSubTitle: string }) => {

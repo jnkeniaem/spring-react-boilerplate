@@ -1,4 +1,4 @@
-import { TodoStatus } from "@/types";
+import { TodoStatus } from "../types";
 import instance from "./axios.instance";
 
 const registerUrl = "/api/v1/auth/register";
