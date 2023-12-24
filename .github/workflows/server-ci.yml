@@ -59,7 +59,7 @@ jobs:
           cd server
           cp build/libs/*.jar deploy-main/
           cd deploy-main
-          docker build -t server-main .
+          docker build -t test-server-repository .
           rm *.jar
           docker tag $REPOSITORY:$IMAGE_TAG $REGISTRY/$REPOSITORY:$IMAGE_TAG
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
