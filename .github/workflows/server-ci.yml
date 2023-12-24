@@ -57,10 +57,10 @@ jobs:
         run: |
           aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $REGISTRY
           cd server
-          cp build/libs/*-*.jar deploy-main/
+          cp build/libs/*.jar deploy-main/
           cd deploy-main
           docker build -t server-main .
-          rm build/libs/*-*.jar
+          rm  deploy-main/*.jar
           docker tag $REPOSITORY:$IMAGE_TAG $REGISTRY/$REPOSITORY:$IMAGE_TAG
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
