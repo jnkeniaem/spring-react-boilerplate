@@ -3,7 +3,7 @@ import LoadingAnimation from "./LoadingAnimation";
 import styled from "styled-components";
 import { login, register } from "../api/axios.custom";
 import { useNavigate } from "react-router-dom";
-import { setCookie } from "@/api/cookies";
+import { setCookie } from "../api/cookies";
 
 const COOKIE_EXPIRE = 1000 * 60 * 60 * 24 * 7; // 7일
 
