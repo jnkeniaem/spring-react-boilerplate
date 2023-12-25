@@ -12,20 +12,6 @@ const AllMemberTodoList = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
-  // const loadTodos = async () => {
-  //   try {
-  //     const response = await fetchAllTodos(currentPage, PAGE_SIZE);
-  //     setTodos(response.data.todos); // Assuming response.data contains the todos
-  //     const totalResources = response.data.totalResources;
-  //     const totalPages = Math.floor(totalResources / PAGE_SIZE);
-  //     setTotalPages(totalPages);
-  //   } catch (error) {
-  //     console.error("Failed to fetch todos:", error);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
   const loadTodos = useCallback(async () => {
     try {
       const response = await fetchAllTodos(currentPage, PAGE_SIZE);
