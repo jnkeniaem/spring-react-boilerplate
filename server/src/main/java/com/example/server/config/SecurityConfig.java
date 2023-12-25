@@ -60,7 +60,12 @@ public class SecurityConfig {
 
 		configuration.addAllowedOriginPattern("*");
 		configuration.addAllowedHeader("*");
-		configuration.addAllowedMethod("*");
+		configuration.addAllowedMethod("GET");
+		configuration.addAllowedMethod("POST");
+		configuration.addAllowedMethod("PUT");
+		configuration.addAllowedMethod("PATCH");
+		configuration.addAllowedMethod("DELETE");
+		configuration.addAllowedMethod("OPTIONS");
 		configuration.setAllowCredentials(true);
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
