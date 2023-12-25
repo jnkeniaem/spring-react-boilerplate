@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import LoadingAnimation from "./LoadingAnimation";
 import styled from "styled-components";
 
@@ -20,7 +20,7 @@ const MyTodoList = () => {
   const [totalPages, setTotalPages] = useState(0);
 
   // Fetch todos when the component mounts
-  const loadTodos = async () => {
+  const loadTodos = useCallback(async () => {
     try {
       const response = await fetchMyTodos(currentPage, PAGE_SIZE);
       setTodos(response.data.todos);
@@ -32,11 +32,11 @@ const MyTodoList = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [currentPage]);
 
   useEffect(() => {
     loadTodos();
-  }, [currentPage, totalPages]);
+  }, [loadTodos]);
 
   const handlePrevPage = () => {
     setCurrentPage((prev) => Math.max(prev - 1, 0));

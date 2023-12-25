@@ -1,7 +1,7 @@
 import { getCookie } from "../api/cookies";
 import { userState } from "../recoil/atoms";
 import { User } from "../types";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { Outlet } from "react-router";
@@ -20,7 +20,7 @@ const Layout = (): JSX.Element => {
   const isRootPath: boolean = location.pathname === "/";
   const isLoginPage: boolean = location.pathname === "/login";
 
-  const getMyInfo = async () => {
+  const getMyInfo = useCallback(async () => {
     try {
       const { data: myInfo } = await fecthMyInfo();
 
@@ -32,7 +32,7 @@ const Layout = (): JSX.Element => {
     } catch (error) {
       navigate("/login");
     }
-  };
+  }, [isLoginPage, isRootPath, navigate, setUser]);
 
   useEffect(() => {
     if (!token && !isLoginPage) {
@@ -40,7 +40,7 @@ const Layout = (): JSX.Element => {
     } else if (token) {
       getMyInfo();
     }
-  }, [token, isLoginPage, navigate]); // Add dependencies here
+  }, [token, isLoginPage, navigate, getMyInfo]); // Add dependencies here
 
   return (
     <WrapperStyled>
