@@ -15,13 +15,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -41,19 +42,17 @@ public class TodoController {
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "Todo 생성 성공"),
 	})
-	@PostMapping
+	@PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	@Secured(MemberRole.S_USER)
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public TodoDto createTodo(
-			@RequestBody CreateTodoRequestDto createTodoRequestDto,
-			@LoginMemberInfo MemberSessionDto memberSessionDto
-	) {
+			@ModelAttribute CreateTodoRequestDto createTodoRequestDto,
+			@LoginMemberInfo MemberSessionDto memberSessionDto) {
 		log.info("Called createTodo() with memberSessionDto: {}, createTodoRequestDto: {}",
 				memberSessionDto, createTodoRequestDto);
 		return todoService.createTodo(
 				memberSessionDto.getMemberId(),
-				createTodoRequestDto.getTodoName()
-		);
+				createTodoRequestDto.getTodoName());
 	}
 
 	@Operation(summary = "전체 회원 Todo 목록 조회", description = "전체 회원의 Todo 목록을 조회합니다.")
@@ -65,8 +64,7 @@ public class TodoController {
 	public TodoListResponseDto getAllTodoList(
 			@LoginMemberInfo MemberSessionDto memberSessionDto,
 			@RequestParam(value = "page", defaultValue = "0") int page,
-			@RequestParam(value = "size", defaultValue = "10") int size
-	) {
+			@RequestParam(value = "size", defaultValue = "10") int size) {
 		log.info("Called getTodoList() with memberSessionDto: {}, page: {}, size: {}",
 				memberSessionDto, page, size);
 		return todoService.getAllTodoList(memberSessionDto.getMemberId(),
@@ -81,14 +79,12 @@ public class TodoController {
 	@Secured(MemberRole.S_USER)
 	public void deleteTodo(
 			@LoginMemberInfo MemberSessionDto memberSessionDto,
-			@PathVariable(value = "todoId") Long todoId
-	) {
+			@PathVariable(value = "todoId") Long todoId) {
 		log.info("Called deleteTodo() with memberSessionDto: {}, todoId: {}",
 				memberSessionDto, todoId);
 		todoService.deleteTodo(
 				memberSessionDto.getMemberId(),
-				todoId
-		);
+				todoId);
 	}
 
 	@Operation(summary = "Todo 상태 변경", description = "Todo의 상태를 변경합니다.")
@@ -100,15 +96,13 @@ public class TodoController {
 	public void changeTodoStatus(
 			@LoginMemberInfo MemberSessionDto memberSessionDto,
 			@PathVariable(value = "todoId") Long todoId,
-			@PathVariable(value = "status") TodoStatus status
-	) {
+			@PathVariable(value = "status") TodoStatus status) {
 		log.info("Called changeTodoStatus() with memberSessionDto: {}, todoId: {}, status: {}",
 				memberSessionDto, todoId, status);
 		todoService.changeTodoStatus(
 				memberSessionDto.getMemberId(),
 				todoId,
-				status
-		);
+				status);
 	}
 
 	@Operation(summary = "내 Todo 목록 조회", description = "내 Todo 목록을 조회합니다.")
@@ -120,8 +114,7 @@ public class TodoController {
 	public TodoListResponseDto getTodoList(
 			@LoginMemberInfo MemberSessionDto memberSessionDto,
 			@RequestParam(value = "page", defaultValue = "0") int page,
-			@RequestParam(value = "size", defaultValue = "10") int size
-	) {
+			@RequestParam(value = "size", defaultValue = "10") int size) {
 		log.info("Called getTodoList() with memberSessionDto: {}, page: {}, size: {}",
 				memberSessionDto, page, size);
 		return todoService.getMyTodoList(memberSessionDto.getMemberId(),
@@ -138,8 +131,7 @@ public class TodoController {
 			@LoginMemberInfo MemberSessionDto memberSessionDto,
 			@PathVariable(value = "memberId") Long targetMember,
 			@RequestParam(value = "page", defaultValue = "0") int page,
-			@RequestParam(value = "size", defaultValue = "10") int size
-	) {
+			@RequestParam(value = "size", defaultValue = "10") int size) {
 		log.info(
 				"Called getTodoList() with memberSessionDto: {}, targetMember: {}, page: {}, size: {}",
 				memberSessionDto, targetMember, page, size);

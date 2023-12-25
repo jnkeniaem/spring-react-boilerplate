@@ -10,8 +10,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,10 +30,10 @@ public class AuthController {
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "회원 가입 성공"),
 	})
-	@PostMapping(value = "/register")
+	@PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public String register(
-			@RequestBody RegistrationRequestDto registrationRequestDto) {
+			@ModelAttribute RegistrationRequestDto registrationRequestDto) {
 		log.info("Called register() with username: {}", registrationRequestDto.getUsername());
 		return authService.register(registrationRequestDto);
 	}
@@ -41,10 +42,10 @@ public class AuthController {
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "로그인 성공"),
 	})
-	@PostMapping(value = "/login")
+	@PostMapping(value = "/login", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	@ResponseStatus(value = HttpStatus.OK)
 	public String login(
-			@RequestBody LoginRequestDto loginRequestDto) {
+			@ModelAttribute LoginRequestDto loginRequestDto) {
 		log.info("Called login() with username: {}", loginRequestDto.getUsername());
 		return authService.login(loginRequestDto);
 	}

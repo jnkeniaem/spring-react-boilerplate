@@ -7,9 +7,13 @@ export const register = async (
   password: string
 ): Promise<any> => {
   try {
-    const response = await instance.post(registerUrl, {
-      username,
-      password,
+    const formData = new FormData();
+    formData.append("username", username);
+    formData.append("password", password);
+    const response = await instance.post(registerUrl, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
     return response;
   } catch (error) {
@@ -24,9 +28,13 @@ export const login = async (
   password: string
 ): Promise<any> => {
   try {
-    const response = await instance.post(loginUrl, {
-      username,
-      password,
+    const formData = new FormData();
+    formData.append("username", username);
+    formData.append("password", password);
+    const response = await instance.post(loginUrl, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
     return response;
   } catch (error) {
@@ -49,8 +57,12 @@ export const fecthMyInfo = async (): Promise<any> => {
 const createTodoUrl = "/api/v1/todos";
 export const createTodo = async (todoName: string): Promise<any> => {
   try {
-    const response = await instance.post(createTodoUrl, {
-      todoName,
+    const formData = new FormData();
+    formData.append("todoName", todoName);
+    const response = await instance.post(createTodoUrl, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
     return response;
   } catch (error) {
