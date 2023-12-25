@@ -58,8 +58,7 @@ public class SecurityConfig {
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 
-		configuration.addAllowedOrigin(clientConfig.getClientUrl());
-		configuration.addAllowedOrigin(clientConfig.getClientHttpUrl());
+		configuration.addAllowedOrigin("*");
 		configuration.addAllowedHeader("*");
 		configuration.addAllowedMethod("*");
 		configuration.setAllowCredentials(true);
@@ -75,7 +74,6 @@ public class SecurityConfig {
 				.antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
 						"/actuator/**",
 						"/api/v1/auth/register",
-						"/api/v1/auth/login"
-				);
+						"/api/v1/auth/login");
 	}
 }
