@@ -6,9 +6,6 @@ axios.defaults.withCredentials = true;
 const instance = axios.create({
   baseURL: import.meta.env.VITE_BE_HOST,
   withCredentials: true,
-  headers: {
-    "Access-Control-Allow-Origin": "*",
-  },
 });
 
 instance.interceptors.request.use(
