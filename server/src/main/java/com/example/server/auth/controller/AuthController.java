@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -33,11 +32,9 @@ public class AuthController {
 	@PostMapping(value = "/register")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public String register(
-			@RequestBody RegistrationRequestDto registrationRequestDto,
-			HttpServletResponse response
-	) {
+			@RequestBody RegistrationRequestDto registrationRequestDto) {
 		log.info("Called register() with username: {}", registrationRequestDto.getUsername());
-		return authService.register(registrationRequestDto, response);
+		return authService.register(registrationRequestDto);
 	}
 
 	@Operation(summary = "로그인", description = "로그인을 요청합니다.")
@@ -47,10 +44,8 @@ public class AuthController {
 	@PostMapping(value = "/login")
 	@ResponseStatus(value = HttpStatus.OK)
 	public String login(
-			@RequestBody LoginRequestDto loginRequestDto,
-			HttpServletResponse response
-	) {
+			@RequestBody LoginRequestDto loginRequestDto) {
 		log.info("Called login() with username: {}", loginRequestDto.getUsername());
-		return authService.login(loginRequestDto, response);
+		return authService.login(loginRequestDto);
 	}
 }

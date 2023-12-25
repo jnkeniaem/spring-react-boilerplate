@@ -1,13 +1,11 @@
 package com.example.server.auth.service;
 
-import com.example.server.auth.domain.CookieManager;
 import com.example.server.auth.domain.MemberRole;
 import com.example.server.auth.jwt.JwtTokenProvider;
 import com.example.server.dto.LoginRequestDto;
 import com.example.server.dto.RegistrationRequestDto;
 import com.example.server.member.domain.Member;
 import com.example.server.member.repository.MemberRepository;
-import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,11 +21,8 @@ public class AuthService {
 	private final BCryptPasswordEncoder passwordEncoder;
 	private final MemberRepository memberRepository;
 	private final JwtTokenProvider jwtTokenProvider;
-	private final CookieManager cookieManager;
 
-
-	public String register(RegistrationRequestDto registrationRequestDto,
-			HttpServletResponse response) {
+	public String register(RegistrationRequestDto registrationRequestDto) {
 		log.info("Called register() with username: {}", registrationRequestDto.getUsername());
 		if (memberRepository.findByUsername(registrationRequestDto.getUsername()).isPresent()) {
 			throw new HttpClientErrorException(
@@ -36,19 +31,15 @@ public class AuthService {
 		Member newMember = Member.createUser(
 				registrationRequestDto.getUsername(),
 				passwordEncoder.encode(registrationRequestDto.getPassword()),
-				MemberRole.MEMBER.getRoleName()
-		);
+				MemberRole.MEMBER.getRoleName());
 		log.info("Created new member: {}", newMember);
 		memberRepository.save(newMember);
 		String accessToken = jwtTokenProvider.createCommonAccessToken(newMember.getId())
 				.getTokenValue();
-		cookieManager.createCookie(
-				response, accessToken
-		);
 		return accessToken;
 	}
 
-	public String login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
+	public String login(LoginRequestDto loginRequestDto) {
 		log.info("Called login() with username: {}", loginRequestDto.getUsername());
 		Member member = memberRepository.findByUsername(loginRequestDto.getUsername())
 				.orElseThrow(() -> new HttpClientErrorException(
@@ -60,9 +51,6 @@ public class AuthService {
 		}
 		String accessToken = jwtTokenProvider.createCommonAccessToken(member.getId())
 				.getTokenValue();
-		cookieManager.createCookie(
-				response, accessToken
-		);
 		return accessToken;
 	}
 }

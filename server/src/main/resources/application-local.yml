@@ -29,14 +29,6 @@ server:
   client:
     url: http://localhost
     http-url: http://localhost
-  cookie:
-    domain: localhost
-    name: access_token
-    max-age: 604800000
-    path: /
-    http-only: false
-    secure: false
-    same-site: none
   jwt:
     common-token-expire-time: 604800000
     refresh-token-expire-time: 2592000000

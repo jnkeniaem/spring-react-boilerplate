@@ -3,6 +3,9 @@ import LoadingAnimation from "./LoadingAnimation";
 import styled from "styled-components";
 import { login, register } from "../api/axios.custom";
 import { useNavigate } from "react-router-dom";
+import { setCookie } from "@/api/cookies";
+
+const COOKIE_EXPIRE = 1000 * 60 * 60 * 24 * 7; // 7일
 
 const LoginTemplate = (props: { pageTitle: string; pageSubTitle: string }) => {
   const { pageTitle, pageSubTitle } = props;
@@ -17,8 +20,11 @@ const LoginTemplate = (props: { pageTitle: string; pageSubTitle: string }) => {
     setIsClicked(true); // 버튼 클릭 시 비활성화
     try {
       const res = await login(username, password);
-      console.log(res);
       if (res.status === 200) {
+        setCookie("access_token", res.data, {
+          path: "/",
+          expires: new Date(Date.now() + COOKIE_EXPIRE),
+        });
         navigate("/home");
       }
     } catch (error: any) {
@@ -81,6 +87,10 @@ const RegisterForm = ({ onBack }: { onBack: () => void }) => {
     try {
       const res = await register(username, password);
       if (res.status === 201) {
+        setCookie("access_token", res.data, {
+          path: "/",
+          expires: new Date(Date.now() + COOKIE_EXPIRE),
+        });
         navigate("/home");
       }
     } catch (error: any) {
