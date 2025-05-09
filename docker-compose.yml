@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  server-main:
+    image: "229262694893.dkr.ecr.ap-northeast-2.amazonaws.com/test-server-repository:latest"
+    restart: always
+    container_name: "server-main"
+    ports:
+      - "8080:8080"
+    networks:
+      - server-network
+
+networks:
+  server-network:
+    driver: bridge
