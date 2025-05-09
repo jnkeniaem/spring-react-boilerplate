@@ -55,7 +55,7 @@ jobs:
           REPOSITORY: test-server-repository
           IMAGE_TAG: latest
         run: |
-          aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $REGISTRY
+          aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin $REGISTRY
           cd server
           cp build/libs/*.jar deploy-main/
           cd deploy-main
