@@ -16,14 +16,16 @@ if command -v docker compose &> /dev/null
 then
     docker compose -f ./dev/docker-compose.yml down --rmi all
     docker compose -f ./dev/docker-compose.yml up --build -d
-else
+else chmod +x ./server/gradlew && ./server/gradlew build --project-dir server
     echo "docker compose 명령어를 찾을 수 없습니다. docker-compose로 실행합니다."
     docker-compose -f ./dev/docker-compose.yml down --rmi all
     docker-compose -f ./dev/docker-compose.yml up --build -d
 fi
 
 echo -e $PURPLE "4. 서버 애플리케이션 의존성 설치" $RESET
-./gradlew build -x test
+# ./gradlew build -x test
+# chmod +x gradlew && gradlew build --project-dir server
+./gradlew build
 
 echo -e $PURPLE "5. 서버 애플리케이션 실행" $RESET
 java -Dspring.profiles.active=local -jar build/libs/server-0.0.1-SNAPSHOT.jar
